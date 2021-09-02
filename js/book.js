@@ -1,18 +1,21 @@
-// get error id 
+// get html documents by elementId
+const searchField = document.getElementById('search-field');
 const error = document.getElementById('errors');
+const totalResult = document.getElementById('total-result-field');
+const searchResult = document.getElementById('search-result');
 
 // searching field 
 const searchBook = () =>{
-    const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
-
-    // empty message error 
+    // remove unnecessary empty fields 
+    error.innerText='';
+    totalResult.innerText='';
+    searchResult.innerHTML='';
+    // empty string error message 
     if(searchText === ""){
-        error.innerText='Please write which book do you want..!';
+        error.innerText='Please enter which book do you want..!';
+        return;
         }
-    else{
-        error.innerText='';
-    }
 
     // url link 
     const url=`https://openlibrary.org/search.json?q=${searchText}`;
@@ -25,17 +28,20 @@ const searchBook = () =>{
 
 // display searching books 
 const displaySearchBook = docs =>{
-          const searchResult=document.getElementById('search-result');
-          searchResult.innerHTML='';
-        const totalResult = document.getElementById('total-result-field');
+            // error handeling 
+          if(docs.length === 0){
+              error.innerText='No result found';
+          }
+          else{
              totalResult.innerText=`Total result found:${docs.length}`;
+          }
         
             //  creating dynamic div for showing info using for loop
           docs.forEach(book => {
               const div = document.createElement('div');
               div.classList.add('col');
               div.innerHTML=`
-              <div class="card">
+              <div class="card h-100">
             <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" class="card-img-top w-50 mx-auto" alt="...">
             <div class="card-body text-center">
               <h5 class="card-title">${book.title}</h5>
